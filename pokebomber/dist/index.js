@@ -292,7 +292,9 @@ var package_default = {
   version: "0.1.0",
   type: "module",
   scripts: {
-    build: "bun build pokebomber/index.ts --outdir dist --target browser --format esm"
+    build: "bun run build:pokebomber && bun run build:snake",
+    "build:pokebomber": "bun build pokebomber/index.ts --outdir pokebomber/dist --target browser --format esm",
+    "build:snake": "bun build snake/index.ts --outdir snake/dist --target browser --format esm"
   }
 };
 
