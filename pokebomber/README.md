@@ -24,7 +24,7 @@ Assim como em `walkers`, o bundle importa `src/vibi.ts` e `src/client.ts` direta
 ## Como rodar
 
 1. Suba o servidor WebSocket (na EC2 compartilhada execute `bun run server` dentro de `~/tmp`).
-2. Abra o front (GitHub Pages, Vercel etc.). Em `localhost` o cliente usa `ws://localhost:2020`; em qualquer domínio público ele assume `wss://game.vibistudiotest.site`.
+2. Abra o front (GitHub Pages, Vercel etc.). Ele sempre conecta em `wss://game.vibistudiotest.site`.
 3. Também é possível sobrescrever o destino adicionando `?ws=wss://meu-endpoint` à URL ou definindo `window.__VIBI_WS_URL__ = "wss://..."` antes de carregar o bundle.
 4. Use um apelido de **uma** letra para manter a compatibilidade com o motor Vibi.
 
@@ -53,8 +53,7 @@ O HTML agora usa um modal para coletar as informações em duas etapas:
 
 O arquivo `src/config.ts` centraliza a URL WebSocket:
 
-- Em `localhost`/`127.0.0.1` usa `ws://localhost:2020`, facilitando testes locais.
-- Em qualquer outro host ele aponta para `wss://game.vibistudiotest.site` (atrás do proxy Nginx com TLS).
+- Sempre usa `wss://game.vibistudiotest.site` (atrás do proxy Nginx com TLS).
 - Adicione `?ws=wss://seu-endpoint` ou defina `window.__VIBI_WS_URL__` para forçar outro backend sem rebuild.
 
 Assim o mesmo bundle pode ficar hospedado no GitHub Pages usando o servidor distante.

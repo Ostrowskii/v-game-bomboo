@@ -1,6 +1,5 @@
 // src/config.ts
 var REMOTE_WSS = "wss://game.vibistudiotest.site";
-var LOCAL_PORT = 2020;
 function has_window() {
   return typeof window !== "undefined" && typeof window.location !== "undefined";
 }
@@ -20,29 +19,30 @@ function from_query_param() {
     const url = new URL(window.location.href);
     const value = url.searchParams.get("ws");
     if (value) {
-      return value.startsWith("ws") ? value : `wss://${value}`;
+      return normalize(value);
     }
   } catch {
   }
   return;
+}
+function normalize(value) {
+  if (value.startsWith("wss://")) {
+    return value;
+  }
+  if (value.startsWith("ws://")) {
+    return `wss://${value.slice("ws://".length)}`;
+  }
+  return `wss://${value}`;
 }
 function detect_url() {
   const manual = from_global_override() ?? from_query_param();
   if (manual) {
     return manual;
   }
-  if (has_window()) {
-    const host = window.location.hostname;
-    const is_local = host === "localhost" || host === "127.0.0.1";
-    if (is_local) {
-      return `ws://${host}:${LOCAL_PORT}`;
-    }
-  }
   return REMOTE_WSS;
 }
 var WS_URL = detect_url();
 var DEFAULT_REMOTE_WS = REMOTE_WSS;
-var DEFAULT_LOCAL_WS = `ws://localhost:${LOCAL_PORT}`;
 
 // src/client.ts
 var time_sync = {
