@@ -40,7 +40,6 @@ function detect_url() {
   return REMOTE_WSS;
 }
 var WS_URL = detect_url();
-var DEFAULT_REMOTE_WS = REMOTE_WSS;
 var DEFAULT_LOCAL_WS = `ws://localhost:${LOCAL_PORT}`;
 
 // src/client.ts
