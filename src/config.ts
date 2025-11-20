@@ -1,6 +1,5 @@
-const REMOTE_HOST = "18.228.172.111";
-const REMOTE_PORT = 8080;
-const LOCAL_PORT  = 2020;
+const REMOTE_WSS = "wss://game.vibistudiotest.site";
+const LOCAL_PORT = 2020;
 
 function has_window(): boolean {
   return typeof window !== "undefined" && typeof window.location !== "undefined";
@@ -21,7 +20,7 @@ function from_query_param(): string | undefined {
     const url = new URL(window.location.href);
     const value = url.searchParams.get("ws");
     if (value) {
-      return value.startsWith("ws") ? value : `ws://${value}`;
+      return value.startsWith("ws") ? value : `wss://${value}`;
     }
   } catch {}
   return undefined;
@@ -41,9 +40,9 @@ function detect_url(): string {
     }
   }
 
-  return `ws://${REMOTE_HOST}:${REMOTE_PORT}`;
+  return REMOTE_WSS;
 }
 
 export const WS_URL = detect_url();
-export const DEFAULT_REMOTE_WS = `ws://${REMOTE_HOST}:${REMOTE_PORT}`;
-export const DEFAULT_LOCAL_WS  = `ws://localhost:${LOCAL_PORT}`;
+export const DEFAULT_REMOTE_WS = REMOTE_WSS;
+export const DEFAULT_LOCAL_WS = `ws://localhost:${LOCAL_PORT}`;

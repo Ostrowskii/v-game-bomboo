@@ -1,3 +1,49 @@
+// src/config.ts
+var REMOTE_WSS = "wss://game.vibistudiotest.site";
+var LOCAL_PORT = 2020;
+function has_window() {
+  return typeof window !== "undefined" && typeof window.location !== "undefined";
+}
+function from_global_override() {
+  if (!has_window())
+    return;
+  const global_any = window;
+  if (typeof global_any.__VIBI_WS_URL__ === "string") {
+    return global_any.__VIBI_WS_URL__;
+  }
+  return;
+}
+function from_query_param() {
+  if (!has_window())
+    return;
+  try {
+    const url = new URL(window.location.href);
+    const value = url.searchParams.get("ws");
+    if (value) {
+      return value.startsWith("ws") ? value : `wss://${value}`;
+    }
+  } catch {
+  }
+  return;
+}
+function detect_url() {
+  const manual = from_global_override() ?? from_query_param();
+  if (manual) {
+    return manual;
+  }
+  if (has_window()) {
+    const host = window.location.hostname;
+    const is_local = host === "localhost" || host === "127.0.0.1";
+    if (is_local) {
+      return `ws://${host}:${LOCAL_PORT}`;
+    }
+  }
+  return REMOTE_WSS;
+}
+var WS_URL = detect_url();
+var DEFAULT_REMOTE_WS = REMOTE_WSS;
+var DEFAULT_LOCAL_WS = `ws://localhost:${LOCAL_PORT}`;
+
 // src/client.ts
 var time_sync = {
   clock_offset: Infinity,
@@ -5,7 +51,7 @@ var time_sync = {
   request_sent_at: 0,
   last_ping: Infinity
 };
-var ws = new WebSocket(`ws://${window.location.hostname}:2020`);
+var ws = new WebSocket(WS_URL);
 var room_watchers = new Map;
 var is_synced = false;
 var sync_listeners = [];
