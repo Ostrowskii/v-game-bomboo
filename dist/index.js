@@ -292,7 +292,7 @@ var package_default = {
   version: "0.1.0",
   type: "module",
   scripts: {
-    build: "bun build pokebomber/index.ts --outdir pokebomber/dist --target browser --format esm"
+    build: "bun build pokebomber/index.ts --outdir dist --target browser --format esm"
   }
 };
 
